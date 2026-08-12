@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FrioBox · Mockups interactivos de lockers refrigerados inteligentes</title>
+<meta name="description" content="Mockups 3D interactivos de la estación FrioBox: vista 360°, flujo de entrega, acceso por QR y PIN, control de temperatura e instalación en punto de servicio. Grupo 2 · UJCV.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ============================================================ NAV -->
+  <nav class="nav">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#04222c" stroke-width="2.1" stroke-linecap="round">
+          <path d="M12 2v20M4.2 6.5l15.6 11M19.8 6.5L4.2 17.5"/>
+          <path d="M12 6.4l2.4-2.2M12 6.4L9.6 4.2M12 17.6l2.4 2.2M12 17.6l-2.4 2.2"/>
+        </svg>
+      </div>
+      <div>
+        <div class="brand-name">Frio<span>Box</span></div>
+        <div class="brand-sub">Mockups · FBX-S1</div>
+      </div>
+    </div>
+
+    <div class="nav-scroll">
+      <div class="nav-label">Recorrido</div>
+      <button class="nav-btn is-active" data-section="panorama"><span class="nav-num">01</span>Panorama</button>
+      <button class="nav-btn" data-section="vista360"><span class="nav-num">02</span>Vista 360°</button>
+      <button class="nav-btn" data-section="entrega"><span class="nav-num">03</span>Entrega del pedido</button>
+      <button class="nav-btn" data-section="acceso"><span class="nav-num">04</span>Acceso QR / PIN</button>
+      <button class="nav-btn" data-section="frio"><span class="nav-num">05</span>Cadena de frío</button>
+      <button class="nav-btn" data-section="instalacion"><span class="nav-num">06</span>Instalación en sitio</button>
+      <button class="nav-btn" data-section="proyecto"><span class="nav-num">07</span>Ficha del proyecto</button>
+    </div>
+
+    <div class="nav-foot">
+      <b>Grupo 2 · UJCV</b><br>
+      ADM4032C Desarrollo Empresarial<br>
+      Asignación No. 5 · II Parcial 2026
+    </div>
+  </nav>
+
+  <!-- ========================================================== STAGE -->
+  <div class="stage">
+    <canvas id="scene-canvas"></canvas>
+    <div class="hotspot-layer" id="hotspot-layer"></div>
+
+    <div class="stage-top">
+      <div class="stage-title">
+        <div class="stage-eyebrow" id="stage-eyebrow">FrioBox · Estación FBX-S1</div>
+        <div class="stage-h" id="stage-h">Panorama del producto</div>
+      </div>
+
+      <div class="chipbar" data-chips="vista360" id="angle-chips" style="display:none">
+        <button class="chip" data-angle="frontal">Frontal</button>
+        <button class="chip is-active" data-angle="tresq">3/4</button>
+        <button class="chip" data-angle="lateral">Lateral</button>
+        <button class="chip" data-angle="posterior">Posterior</button>
+        <button class="chip" data-angle="superior">Superior</button>
+        <button class="chip" data-angle="kiosco">Kiosco</button>
+        <button class="chip" data-angle="zocalo">Zócalo</button>
+      </div>
+
+      <div data-chips="instalacion" style="display:none;flex-direction:column;gap:6px;align-items:flex-end">
+        <div class="chipbar" id="env-chips">
+          <button class="chip is-active" data-env="gasolinera">Gasolinera</button>
+          <button class="chip" data-env="supermercado">Supermercado</button>
+          <button class="chip" data-env="farmacia">Farmacia</button>
+          <button class="chip" data-env="estudio">Estudio</button>
+        </div>
+        <div class="chipbar" id="inst-chips">
+          <button class="chip is-active" data-view="peaton">Peatón</button>
+          <button class="chip" data-view="vehicular">Vehicular</button>
+          <button class="chip" data-view="aerea">Aérea</button>
+          <button class="chip" data-view="contexto">Contexto</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage-bottom">
+      <div class="hint">
+        <kbd>Arrastrar</kbd> girar <kbd>Rueda</kbd> acercar <kbd>Clic der.</kbd> desplazar
+      </div>
+      <div class="readout">
+        <div class="readout-card"><div class="rl">Refrigeración</div><div class="rv cold" id="ro-cold">3.4°</div></div>
+        <div class="readout-card"><div class="rl">Congelación</div><div class="rv freeze" id="ro-freeze">-18.2°</div></div>
+        <div class="readout-card"><div class="rl">Estado</div><div class="rv ok" id="ro-status">Nominal</div></div>
+        <div class="readout-card"><div class="rl">Energía</div><div class="rv ok" id="ro-power">Red</div></div>
+      </div>
+    </div>
+
+    <div class="loader" id="loader">
+      <div class="loader-in">
+        <div class="loader-ring"></div>
+        <div class="loader-t">Armando la estación FrioBox…</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================== PANEL -->
+  <aside class="panel">
+
+    <!-- ------------------------------------------------- 01 PANORAMA -->
+    <section class="panel-view is-active" data-section="panorama">
+      <div class="p-eyebrow">01 · Panorama</div>
+      <h1 class="p-title">Estación FrioBox FBX-S1</h1>
+      <p class="p-lead">Red de casilleros inteligentes con <b>control térmico dual</b> para la custodia
+        temporal de productos perecederos en la última milla. El cliente compra en línea y retira
+        cuando le convenga: FrioBox elimina la rigidez del horario de entrega sin romper la cadena de frío.</p>
+
+      <div class="p-sec">Qué resuelve</div>
+
+      <div class="card">
+        <div class="card-h"><span class="ico" data-ico="snow"></span>Dos temperaturas en un solo punto</div>
+        <p class="card-b">Cuatro casilleros de congelación a −18 °C y siete de refrigeración de 0 a 5 °C,
+          con circuitos independientes. Es la capacidad que ningún locker de paquetería tradicional ofrece.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-h"><span class="ico ok" data-ico="clock"></span>Entrega desatendida 24/7</div>
+        <p class="card-b">El repartidor deposita y se va; el cliente retira a la hora que quiera.
+          Nadie de FrioBox necesita estar en el sitio y no hay intentos fallidos de entrega.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-h"><span class="ico violet" data-ico="qr"></span>Acceso por QR o PIN único</div>
+        <p class="card-b">Cada pedido genera un código de un solo uso desde la app. Abre únicamente
+          la puerta asignada y se invalida al usarse o al vencer.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-h"><span class="ico warn" data-ico="thermo"></span>Trazabilidad térmica visible</div>
+        <p class="card-b">Un sensor por casillero reporta a la nube cada 60 segundos. El cliente ve la
+          temperatura real de su producto en la app: confianza sanitaria por encima del estándar logístico.</p>
+      </div>
+
+      <div class="p-sec">Ficha técnica de la unidad</div>
+      <dl style="margin:0">
+        <div class="spec"><dt>Modelo</dt><dd>FBX-S1</dd></div>
+        <div class="spec"><dt>Dimensiones (an × al × pr)</dt><dd>1.86 × 2.42 × 0.80 m</dd></div>
+        <div class="spec"><dt>Casilleros</dt><dd>11 (4 congelación · 7 refrigeración)</dd></div>
+        <div class="spec"><dt>Zona refrigerada</dt><dd>0 a 5 °C</dd></div>
+        <div class="spec"><dt>Zona congelada</dt><dd>−18 °C (−20 a −16)</dd></div>
+        <div class="spec"><dt>Volumen útil total</dt><dd>≈ 1 480 L</dd></div>
+        <div class="spec"><dt>Acceso</dt><dd>QR dinámico · PIN 6 dígitos · NFC</dd></div>
+        <div class="spec"><dt>Alimentación</dt><dd>220 V + UPS de respaldo</dd></div>
+        <div class="spec"><dt>Conectividad</dt><dd>Fibra o LTE con failover</dd></div>
+        <div class="spec"><dt>Chasis</dt><dd>Acero reforzado antivandálico, anclado</dd></div>
+        <div class="spec"><dt>Operación</dt><dd>Autoservicio 24/7 sin personal</dd></div>
+      </dl>
+
+      <div class="p-sec">Cómo usar estos mockups</div>
+      <p class="card-b">Gire el modelo con el ratón en cualquier momento. Use el menú de la izquierda
+        para pasar de la anatomía del equipo al flujo de entrega, al acceso con QR o PIN, al monitoreo
+        de temperatura y a la instalación en cada tipo de local.</p>
+    </section>
+
+    <!-- ------------------------------------------------- 02 VISTA 360 -->
+    <section class="panel-view" data-section="vista360">
+      <div class="p-eyebrow">02 · Vista 360°</div>
+      <h1 class="p-title">Anatomía del equipo</h1>
+      <p class="p-lead">Recorra la unidad desde cualquier ángulo con los botones de la parte superior
+        del visor, o arrastre libremente. Active la radiografía para ver el interior de los casilleros,
+        los evaporadores y los sensores.</p>
+
+      <div class="p-sec">Modos de visualización</div>
+      <div class="switchrow"><span>Radiografía (corte interior)</span><button class="sw" id="tg-xray"></button></div>
+      <div class="switchrow"><span>Flujo de aire frío</span><button class="sw" id="tg-air"></button></div>
+      <div class="switchrow"><span>Abrir todas las puertas</span><button class="sw" id="tg-doors"></button></div>
+      <div class="switchrow"><span>Puntos de interés</span><button class="sw on" id="tg-hotspots"></button></div>
+      <div class="switchrow"><span>Rotación automática</span><button class="sw" id="tg-rotate"></button></div>
+
+      <div class="p-sec">Detalle del componente</div>
+      <div id="hs-detail"></div>
+
+      <div class="p-sec">Cuadro de casilleros</div>
+      <p class="card-b" style="margin-bottom:11px">Toque cualquier fila para abrir ese casillero en el modelo.</p>
+      <table class="mini-table" id="door-table">
+        <thead><tr><th>Casillero</th><th>Zona</th><th>cm</th><th>Vol.</th></tr></thead>
+        <tbody></tbody>
+      </table>
+
+      <div class="p-sec">Acabados y protecciones</div>
+      <div class="card">
+        <div class="card-h"><span class="ico" data-ico="shield"></span>Chasis antivandálico</div>
+        <p class="card-b">Acero pintado al horno, puertas de doble pared con burlete magnético, jaladeras
+          embutidas sin puntos de palanca y cuatro anclajes con pernos de expansión a la losa.</p>
+      </div>
+      <div class="card">
+        <div class="card-h"><span class="ico ok" data-ico="bolt"></span>Autonomía ante fallas</div>
+        <p class="card-b">UPS interno para cerraduras, sensores y comunicación, más protocolo de apertura
+          manual asistida documentado en el manual operativo.</p>
+      </div>
+    </section>
+
+    <!-- --------------------------------------------------- 03 ENTREGA -->
+    <section class="panel-view" data-section="entrega">
+      <div class="p-eyebrow">03 · Entrega</div>
+      <h1 class="p-title">Flujograma productivo</h1>
+      <p class="p-lead">Los seis pasos del proceso, tal como quedaron definidos en el plan: desde que el
+        aliado envía la solicitud hasta que el cliente retira. Avance paso por paso y observe la reacción
+        del equipo en el visor.</p>
+
+      <div class="btnrow">
+        <button class="btn ghost" id="flow-prev">◀</button>
+        <button class="btn primary" id="flow-auto"><span data-ico="clock"></span>Reproducir</button>
+        <button class="btn ghost" id="flow-next">▶</button>
+      </div>
+
+      <ul class="steps" id="flow-steps"></ul>
+
+      <div class="p-sec">Lo que ve el cliente</div>
+      <div class="phone-wrap">
+        <div class="phone">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="ps-bar"><span>18:24</span><span>FrioBox App</span></div>
+            <div class="ps-brand">
+              <div class="m"><svg viewBox="0 0 24 24" fill="none" stroke="#04222c" stroke-width="2.2" stroke-linecap="round"><path d="M12 2v20M4.2 6.5l15.6 11M19.8 6.5L4.2 17.5"/></svg></div>
+              <div class="t">Mi pedido</div>
+            </div>
+            <div id="flow-phone"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-h"><span class="ico" data-ico="truck"></span>Eficiencia de centralización</div>
+        <p class="card-b">El aliado consolida muchas entregas en un solo punto en lugar de recorrer
+          domicilio por domicilio: menos kilómetros, menos costo operativo y menos impacto ambiental.</p>
+      </div>
+    </section>
+
+    <!-- ---------------------------------------------------- 04 ACCESO -->
+    <section class="panel-view" data-section="acceso">
+      <div class="p-eyebrow">04 · Acceso</div>
+      <h1 class="p-title">Retiro con QR o PIN</h1>
+      <p class="p-lead">La validación es la barrera de seguridad del servicio. Pruebe los dos métodos:
+        escanee el QR de un solo uso o digite el PIN de seis dígitos en el teclado del kiosco.</p>
+
+      <div class="chipbar" id="acc-mode" style="justify-content:flex-start;margin-bottom:14px">
+        <button class="chip is-active" data-mode="qr">Código QR</button>
+        <button class="chip" data-mode="pin">PIN de 6 dígitos</button>
+      </div>
+
+      <div class="phone-wrap">
+        <div class="phone">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="ps-bar"><span>19:41</span><span>FrioBox App</span></div>
+            <div class="ps-brand">
+              <div class="m"><svg viewBox="0 0 24 24" fill="none" stroke="#04222c" stroke-width="2.2" stroke-linecap="round"><path d="M12 2v20M4.2 6.5l15.6 11M19.8 6.5L4.2 17.5"/></svg></div>
+              <div class="t">Retirar pedido</div>
+            </div>
+
+            <div id="acc-qr-block">
+              <div style="text-align:center;font-size:10.5px;color:var(--text-2);margin-bottom:9px">
+                Casillero <b style="color:var(--ice-300)">C3</b> · Estación 04
+              </div>
+              <div class="qr-box" id="acc-qr"></div>
+              <div style="text-align:center;font-family:var(--mono);font-size:10px;color:var(--text-3)" id="acc-code"></div>
+              <div style="display:flex;justify-content:space-between;font-size:10px;margin-top:10px;padding-top:9px;border-top:1px dashed var(--line)">
+                <span style="color:var(--text-3)">Vence en</span>
+                <b style="font-family:var(--mono);color:var(--warn)" id="acc-expiry">60 s</b>
+              </div>
+            </div>
+
+            <div id="acc-pin-block" style="display:none">
+              <div style="text-align:center;font-size:10.5px;color:var(--text-2)">Su PIN de retiro</div>
+              <div style="text-align:center;font-family:var(--mono);font-size:26px;font-weight:600;color:var(--freeze-300);letter-spacing:.1em;margin:8px 0 4px" id="acc-pin"></div>
+              <div style="text-align:center;font-size:9.5px;color:var(--text-3);margin-bottom:6px">Digítelo en el teclado del kiosco</div>
+              <div class="pin-display" id="pin-display"></div>
+              <div class="keypad" id="keypad"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btnrow">
+        <button class="btn primary" id="acc-scan"><span data-ico="qr"></span>Escanear en el kiosco</button>
+      </div>
+      <div class="btnrow" style="margin-top:0">
+        <button class="btn" id="acc-new">Generar nuevo código</button>
+        <button class="btn" id="acc-fail">Probar código vencido</button>
+      </div>
+
+      <div id="acc-msg" style="margin-top:12px"></div>
+
+      <div class="p-sec">Cómo se protege el retiro</div>
+      <div class="card">
+        <div class="card-h"><span class="ico" data-ico="lock"></span>Un solo uso y con vencimiento</div>
+        <p class="card-b">El QR se genera al momento del depósito y muere al abrirse la puerta o al
+          expirar el plazo de resguardo. Un código filtrado o reenviado ya no sirve.</p>
+      </div>
+      <div class="card">
+        <div class="card-h"><span class="ico violet" data-ico="pin"></span>PIN como respaldo</div>
+        <p class="card-b">Si el cliente no tiene batería o señal, el PIN enviado por SMS le permite
+          retirar igual. Tras tres intentos fallidos el casillero se bloquea y avisa a la central.</p>
+      </div>
+      <div class="card">
+        <div class="card-h"><span class="ico ok" data-ico="shield"></span>Evidencia de cada apertura</div>
+        <p class="card-b">La cámara del kiosco graba el evento y el sistema registra hora, casillero y
+          método de validación. Sirve para resolver reclamos y disuade el vandalismo.</p>
+      </div>
+      <p class="card-b" style="color:var(--text-3);font-size:11px;margin-top:14px">
+        Nota: el código mostrado es una representación visual del formato, no un QR decodificable.</p>
+    </section>
+
+    <!-- ------------------------------------------------ 05 CADENA FRÍO -->
+    <section class="panel-view" data-section="frio">
+      <div class="p-eyebrow">05 · Cadena de frío</div>
+      <h1 class="p-title">Control térmico dual</h1>
+      <p class="p-lead">Las dos zonas se sostienen por separado y cada casillero reporta su propia
+        lectura. Provoque los eventos típicos de operación y observe cómo responde el sistema.</p>
+
+      <div class="chart-card">
+        <div class="chart-head">
+          <div class="chart-title">Últimos 40 min</div>
+          <div class="legend">
+            <span><i style="background:#35c8e8"></i>0 a 5 °C</span>
+            <span><i style="background:#7b8cff"></i>−18 °C</span>
+          </div>
+        </div>
+        <canvas id="temp-chart"></canvas>
+      </div>
+
+      <div class="btnrow">
+        <button class="btn" id="frio-door"><span data-ico="box"></span>Simular apertura</button>
+        <button class="btn" id="frio-power"><span data-ico="bolt"></span>Corte de energía</button>
+      </div>
+      <div class="btnrow" style="margin-top:0">
+        <button class="btn" id="frio-reset">Reiniciar simulación</button>
+      </div>
+
+      <div id="frio-alerts" style="margin-top:13px"></div>
+
+      <div class="p-sec">Cómo se sostiene el frío</div>
+      <div class="card">
+        <div class="card-h"><span class="ico" data-ico="thermo"></span>Sensor por casillero</div>
+        <p class="card-b">No se mide el promedio del gabinete: cada casillero tiene su sensor y su
+          registro, de modo que la trazabilidad corresponde al producto de cada cliente.</p>
+      </div>
+      <div class="card">
+        <div class="card-h"><span class="ico warn" data-ico="bell"></span>Monitoreo remoto automatizado</div>
+        <p class="card-b">El sistema detecta anomalías térmicas antes de que afecten al cliente y avisa
+          a la central; el técnico de campo sale con el diagnóstico ya hecho.</p>
+      </div>
+      <div class="card">
+        <div class="card-h"><span class="ico ok" data-ico="bolt"></span>UPS y masa térmica</div>
+        <p class="card-b">Ante un corte, el UPS mantiene cerraduras, sensores y comunicación mientras el
+          aislamiento del gabinete conserva la temperatura el tiempo necesario para responder.</p>
+      </div>
+
+      <div class="p-sec">Rangos de operación</div>
+      <table class="mini-table">
+        <thead><tr><th>Producto</th><th>Zona</th><th>Rango</th></tr></thead>
+        <tbody>
+          <tr><td>Lácteos y carnes frescas</td><td><span class="tag cold">Refrig.</span></td><td>0 a 5 °C</td></tr>
+          <tr><td>Frutas y verduras</td><td><span class="tag cold">Refrig.</span></td><td>2 a 6 °C</td></tr>
+          <tr><td>Medicamentos termosensibles</td><td><span class="tag cold">Refrig.</span></td><td>2 a 8 °C</td></tr>
+          <tr><td>Flores cortadas</td><td><span class="tag cold">Refrig.</span></td><td>1 a 4 °C</td></tr>
+          <tr><td>Helados y congelados</td><td><span class="tag freeze">Congel.</span></td><td>−20 a −16 °C</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ----------------------------------------------- 06 INSTALACIÓN -->
+    <section class="panel-view" data-section="instalacion">
+      <div class="p-eyebrow">06 · Instalación</div>
+      <h1 class="p-title">En el punto de servicio</h1>
+      <p class="p-lead" id="env-note">Ubicación primaria del plan: gasolinera de alto flujo urbano.</p>
+
+      <div class="p-sec">Implantación y holguras</div>
+      <canvas id="site-plan"></canvas>
+
+      <div class="p-sec">Requisitos del sitio</div>
+      <dl style="margin:0">
+        <div class="spec"><dt>Huella en piso</dt><dd>1.86 × 0.80 m</dd></div>
+        <div class="spec"><dt>Altura libre mínima</dt><dd>2.60 m</dd></div>
+        <div class="spec"><dt>Holgura trasera</dt><dd>40 cm (ventilación)</dd></div>
+        <div class="spec"><dt>Zona de maniobra frontal</dt><dd>120 cm</dd></div>
+        <div class="spec"><dt>Acometida eléctrica</dt><dd>220 V / 20 A dedicado</dd></div>
+        <div class="spec"><dt>Piso</dt><dd>Losa nivelada, anclaje con pernos</dd></div>
+        <div class="spec"><dt>Techo o marquesina</dt><dd>Requerido (protección de lluvia)</dd></div>
+        <div class="spec"><dt>Iluminación nocturna</dt><dd>Propia + del establecimiento</dd></div>
+      </dl>
+
+      <div class="p-sec">Tipos de ubicación</div>
+      <table class="mini-table">
+        <thead><tr><th>Punto</th><th>Por qué</th></tr></thead>
+        <tbody>
+          <tr><td>Gasolinera</td><td>Flujo vehicular y peatonal 24 h, techumbre, vigilancia existente</td></tr>
+          <tr><td>Supermercado aliado</td><td>Integración con su checkout; el cliente recoge al pasar</td></tr>
+          <tr><td>Farmacia</td><td>Medicamentos en cadena de frío con trazabilidad verificable</td></tr>
+          <tr><td>Torre de oficinas</td><td>Retiro al salir de la jornada, alta densidad de usuarios</td></tr>
+        </tbody>
+      </table>
+
+      <div class="p-sec">Convenio con el aliado</div>
+      <div class="card">
+        <div class="card-h"><span class="ico" data-ico="pin"></span>Qué aporta cada parte</div>
+        <p class="card-b">El establecimiento cede el espacio, la energía y la vigilancia perimetral;
+          FrioBox aporta el equipo, el software, el mantenimiento y el tráfico de clientes que llegan a
+          retirar. El rendimiento de cada ubicación se evalúa cada semestre.</p>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------- 07 PROYECTO -->
+    <section class="panel-view" data-section="proyecto">
+      <div class="p-eyebrow">07 · Proyecto</div>
+      <h1 class="p-title">FrioBox en el plan de negocios</h1>
+      <p class="p-lead">Estos mockups traducen a imagen la Asignación No. 5 de Desarrollo Empresarial:
+        descripción de la empresa, análisis FODA y CAME, tipo de empresa, ubicación y tamaño, ventajas
+        competitivas, flujograma productivo y organigrama operativo.</p>
+
+      <div class="p-sec">Identidad de la empresa</div>
+      <dl style="margin:0">
+        <div class="spec"><dt>Giro</dt><dd>Servicios</dd></div>
+        <div class="spec"><dt>Naturaleza</dt><dd>Base tecnológica (startup)</dd></div>
+        <div class="spec"><dt>Tamaño</dt><dd>Microempresa (&lt; 10 empleados)</dd></div>
+        <div class="spec"><dt>Sede</dt><dd>Distrito Artemisa, Tegucigalpa</dd></div>
+        <div class="spec"><dt>Departamento</dt><dd>Francisco Morazán, Honduras</dd></div>
+        <div class="spec"><dt>Red de lockers</dt><dd>Puntos de conveniencia urbana</dd></div>
+      </dl>
+
+      <div class="p-sec">Ventajas competitivas</div>
+      <div class="card">
+        <div class="card-h"><span class="ico" data-ico="snow"></span>Control térmico dual urbanizado</div>
+        <p class="card-b">Micro-almacenamiento en punto de retiro urbano con refrigeración y congelación
+          simultáneas, algo que ni los lockers de paquetería ni los refrigeradores industriales ofrecen.</p>
+      </div>
+      <div class="card">
+        <div class="card-h"><span class="ico ok" data-ico="clock"></span>Disponibilidad total autónoma</div>
+        <p class="card-b">Entrega desatendida: el cliente es dueño absoluto de su tiempo de retiro.</p>
+      </div>
+
+      <div class="p-sec">Distingos</div>
+      <table class="mini-table">
+        <thead><tr><th>Distingo</th><th>Efecto</th></tr></thead>
+        <tbody>
+          <tr><td>Eficiencia de centralización</td><td>Optimiza rutas del aliado y reduce su costo e impacto ambiental</td></tr>
+          <tr><td>Versatilidad del servicio</td><td>Alimentos, medicamentos, flores y otros insumos sensibles</td></tr>
+          <tr><td>Trazabilidad térmica digital</td><td>Monitoreo en tiempo real desde la app del cliente</td></tr>
+        </tbody>
+      </table>
+
+      <div class="p-sec">FODA en una línea</div>
+      <table class="mini-table">
+        <thead><tr><th>Eje</th><th>Punto crítico</th></tr></thead>
+        <tbody>
+          <tr><td>Fortaleza</td><td>Tecnología térmica dual y acceso validado por QR o PIN</td></tr>
+          <tr><td>Oportunidad</td><td>Auge del e-commerce de víveres y alianzas B2B</td></tr>
+          <tr><td>Debilidad</td><td>Alta inversión inicial y marca sin posicionamiento</td></tr>
+          <tr><td>Amenaza</td><td>Vandalismo, competencia con más músculo y fallas de energía o red</td></tr>
+        </tbody>
+      </table>
+      <p class="card-b" style="margin-top:11px">El CAME responde a cada eje: monitoreo remoto automatizado,
+        estructura antivándalos con cámaras, UPS con apertura de emergencia, patentes de diseño y software,
+        e integración por API en el checkout de los aliados.</p>
+
+      <div class="p-sec">Organigrama operativo</div>
+      <table class="mini-table">
+        <thead><tr><th>Puesto</th><th>Responsable</th></tr></thead>
+        <tbody>
+          <tr><td>Gerente general</td><td>Hilda Castillo</td></tr>
+          <tr><td>Jefe de operaciones y TI</td><td>Maynor Rodríguez</td></tr>
+          <tr><td>Jefe de marketing y ventas</td><td>Joshua Calderón</td></tr>
+          <tr><td>Jefa de contabilidad</td><td>Génesis Ortega</td></tr>
+          <tr><td>Jefa de finanzas y legal</td><td>María F. Lagos</td></tr>
+          <tr><td>Plazas futuras</td><td>Técnico de campo · Desarrollador jr. · Ejecutivo de ventas · Servicio al cliente · Auxiliar contable · RR. HH.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="p-sec">Fuente</div>
+      <p class="card-b">Grupo 2 · ADM4032C Desarrollo Empresarial · Asignación No. 5 «FrioBox: Lockers
+        Refrigerados Inteligentes Urbanos» · Catedrático: Msc. Manuel Vargas · Universidad José Cecilio
+        del Valle · II Parcial, II Período Académico 2026.</p>
+      <p class="card-b" style="color:var(--text-3);font-size:11px;margin-top:12px">
+        Integrantes: Hilda Eunice Castillo Urbina · Maynor Enrique Rodríguez Ávila ·
+        Joshua Israel Calderón Sánchez · Génesis Abigahil Ortega Chavarría · María Fernanda Lagos Reyes.</p>
+    </section>
+
+  </aside>
+</div>
+
+<script src="vendor/three.min.js"></script>
+<script src="vendor/OrbitControls.js"></script>
+<script src="js/locker.js"></script>
+<script src="js/environments.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
